@@ -78,7 +78,7 @@ def pp_trace(pcap_file , unit, config, scenario, ascii_trace_file, buf_size):
     matches = [ pcap_trace_lines.index(ln) for ln in pcap_trace_lines if re.match(regex_con,ln)]
 
     if len(matches) <=0 :
-        print "No TCP connections found"
+        print ("No TCP connections found")
         sys.exit()
 
     # create a list of TCP connections, each list contains lines in trace for that connection
@@ -99,7 +99,7 @@ def pp_trace(pcap_file , unit, config, scenario, ascii_trace_file, buf_size):
                               t.time().second ) * 1000 + \
                               ( t.time().microsecond/1000 )
         except:
-            print "Couldn't parse the flow completion time"
+            print ("Couldn't parse the flow completion time")
 
         item = connections_list[i]  
         conn = item[0]
