@@ -24,5 +24,5 @@ def exe_comm(cmd):
 def exe_com(cmd):
 	pipe = subprocess.Popen(cmd, stdout=PIPE)
 	for line in iter(pipe.stdout.readline,''):
-		print line
+		print (line)
 	pipe.communicate()

@@ -40,7 +40,7 @@ def cmdRunner(x, numMetrics, scenario, config):
         runNo = str(run+1)
         #pdb.set_trace()
         waf_cmd, qSize = wafCmd(runNo, x, scenario, config)
-        print waf_cmd
+        print (waf_cmd)
     #execute waf command
         exe_com(shlex.split(waf_cmd))
         pcapFiles = glob(pcapName + "*.pcap")
