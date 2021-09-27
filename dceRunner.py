@@ -29,5 +29,5 @@ try:
         scenario=sys.argv[2]
         bfsRunner (configFile, scenario)
 except IndexError:
-    print "to run on cluster, python dceRunner.py [config file]"
-    print "to run on BFS, python dceRunner.py [config file] [scenario]"
+    print ("to run on cluster, python dceRunner.py [config file]")
+    print ("to run on BFS, python dceRunner.py [config file] [scenario]")
