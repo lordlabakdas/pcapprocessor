@@ -3,7 +3,7 @@
 ## Copyright (c) 2018 ResiliNets, ITTC, University of Kansas
 ##
 ## Author: Siddharth Gangadhar
-## 
+##
 ## James P.G. Sterbenz <jpgs@ittc.ku.edu>, director
 ## ResiliNets Research Group  http://wiki.ittc.ku.edu/resilinets
 ## Information and Telecommunication Technology Center (ITTC)
@@ -22,12 +22,12 @@ import bfsRunner
 from bfsRunner import *
 
 try:
-    configFile=sys.argv[1]
-    if len(sys.argv)==2:
+    configFile = sys.argv[1]
+    if len(sys.argv) == 2:
         pbsWriter(configFile)
-    elif len(sys.argv)==3:
-        scenario=sys.argv[2]
-        bfsRunner (configFile, scenario)
+    elif len(sys.argv) == 3:
+        scenario = sys.argv[2]
+        bfsRunner(configFile, scenario)
 except IndexError:
-    print ("to run on cluster, python dceRunner.py [config file]")
-    print ("to run on BFS, python dceRunner.py [config file] [scenario]")
+    print("to run on cluster, python dceRunner.py [config file]")
+    print("to run on BFS, python dceRunner.py [config file] [scenario]")
