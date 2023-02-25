@@ -11,9 +11,7 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-import ConfigParser
 from ConfigParser import *
-import pdb
 import calcQsz
 from calcQsz import *
 

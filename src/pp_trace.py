@@ -20,18 +20,14 @@
 import re
 import sys
 import datetime
-import time
-import subprocess
-from subprocess import Popen, PIPE
 import shlex
 import exe_comm
-import ConfigParser
 from ConfigParser import *
 from numpy import *
 
+
 # input to this fuction are, a pcap file and date rate unit
 def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
-
     # supported data rate units are : KB, Kb, MB, Mb, GB, Gb
     # anything other are treated as b/s
 
@@ -60,7 +56,7 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
     a = array(axis_y1)
     queue_mean = a.mean()
     queue_variance = a.var()
-    numpy_obj = array([axis_x, axis_y1])
+    array([axis_x, axis_y1])
 
     trace_cmd = "tcptrace -l -r -n -W --csv " + pcap_file
 
@@ -91,7 +87,6 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
     # following parsing is dependent on the tcptrace long format.
     result_str = "\n"
     for i in range(len(connections_list)):
-
         flow_cmp_time = 0
         try:
             time_stamp = pcap_trace_lines[matches[i] - 2].split()[-1]
@@ -103,7 +98,7 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
             print("Couldn't parse the flow completion time")
 
         item = connections_list[i]
-        conn = item[0]
+        item[0]
         labels = item[1].split(",")
         values = item[3].split(",")
 
@@ -112,8 +107,8 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
         if int(values[labels.index("unique_bytes_sent_a2b")]) <= 0:
             conn_suffix = "b2a"
 
-        host_a = values[labels.index("host_a")]
-        host_b = values[labels.index("host_b")]
+        values[labels.index("host_a")]
+        values[labels.index("host_b")]
         tx_packts = int(values[labels.index("total_packets_" + conn_suffix)])
         rexmt_packts = int(values[labels.index("rexmt_data_pkts_" + conn_suffix)])
         overhead = PACKET_OVERHEAD * int(

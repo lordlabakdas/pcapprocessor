@@ -11,17 +11,12 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-import numpy
 from numpy import *
 import shlex
-import exe_comm
 from exe_comm import *
-import ConfigParser
 from ConfigParser import *
 import wafCmd
 from wafCmd import *
-import pdb
-import os, sys
 
 # pptrace_path = os.path.abspath('/raid5/sgondi/transport/santoshg')
 # sys.path.append(pptrace_path)

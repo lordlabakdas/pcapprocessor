@@ -12,7 +12,6 @@
 ##
 
 import os
-import pdb
 import cfgPbsWriter
 from cfgPbsWriter import *
 
@@ -37,7 +36,15 @@ outputFactor = "outputFactor = Mb"
 dceProt = "dceProt = "
 qSizeFileName = "qSizeFileName = "
 # qSizeFileName = 'qMonitoring = '
-cmd = "cmd = /work/siddharth/ns-3/dce-Nov15/dce/source/ns-3-dce/build/bin/%(script)s --error=%(x)s --seed=%(runNo)s --pktSize=%(pktSize)s --accessSpeed=%(accessSpeed)s --accessDelay=%(accessDelay)s --bottleneckSpeed=%(bottleneckSpeed)s --bottleneckDelay=%(bottleneckDelay)s --pcapFile=%(pcapFile)s --queue_size=%(queue_size)s --dceProt=%(dceProt)s --stopTime=%(stopTime)s --qMonitoring=%(qMonitoring)s --qSizeFileName=%(qSizeFileName)s"
+cmd = (
+    "cmd = /work/siddharth/ns-3/dce-Nov15/dce/source/ns-3-dce/build/bin/%(script)s"
+    " --error=%(x)s --seed=%(runNo)s --pktSize=%(pktSize)s"
+    " --accessSpeed=%(accessSpeed)s --accessDelay=%(accessDelay)s"
+    " --bottleneckSpeed=%(bottleneckSpeed)s --bottleneckDelay=%(bottleneckDelay)s"
+    " --pcapFile=%(pcapFile)s --queue_size=%(queue_size)s --dceProt=%(dceProt)s"
+    " --stopTime=%(stopTime)s --qMonitoring=%(qMonitoring)s"
+    " --qSizeFileName=%(qSizeFileName)s"
+)
 speed = [2000, 4000, 6000, 8000, 10000]
 # speed=[200,400,600,800]
 # speed = [200,400,600,800,1000]

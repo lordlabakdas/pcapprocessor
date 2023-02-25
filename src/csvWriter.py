@@ -12,11 +12,8 @@
 ##
 
 import csv
-import numpy
 from numpy import *
-import ConfigParser
 from ConfigParser import *
-import pdb
 
 
 # write metrics statistics along with labels to csv file

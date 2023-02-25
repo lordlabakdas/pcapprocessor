@@ -11,9 +11,7 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-import numpy
 from numpy import *
-import pdb
 
 
 def xscaleArray(xscale):

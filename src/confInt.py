@@ -11,11 +11,8 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-import numpy
 from numpy import *
-import scipy
 from scipy import stats
-from scipy.stats import t
 
 
 # function to calculate error bars using 95% confidence intervals

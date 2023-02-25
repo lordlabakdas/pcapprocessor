@@ -11,11 +11,8 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-import numpy
 from numpy import *
-import confInt
 from confInt import *
-import pdb
 
 # calculate mean, standard deviation and confidence intervals for each metrics over multiple runs
 

@@ -11,14 +11,11 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-import sys
-import numpy
 from numpy import *
 import ConfigParser
 from ConfigParser import *
 import xscaleArray
 from xscaleArray import *
-import pdb
 import cmdRunner
 from cmdRunner import *
 import metricStats

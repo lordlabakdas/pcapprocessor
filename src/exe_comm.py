@@ -11,9 +11,8 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-import sys
 import subprocess
-from subprocess import Popen, PIPE
+from subprocess import PIPE
 
 
 def exe_comm(cmd):

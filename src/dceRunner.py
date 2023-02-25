@@ -15,8 +15,6 @@ import sys
 from sys import *
 import pbsWriter
 from pbsWriter import *
-import pdb
-import ConfigParser
 from ConfigParser import *
 import bfsRunner
 from bfsRunner import *

@@ -12,7 +12,6 @@
 ##
 
 import os
-import pdb
 
 
 def cfgPbsWriter(configFile, jobsDir):
@@ -54,15 +53,18 @@ def cfgPbsWriter(configFile, jobsDir):
         pbsFile.write("SAVE_DCE=$DCE_PATH" + "\n")
         pbsFile.write("SAVE_DCE_ROOT=$DCE_ROOT" + "\n")
         pbsFile.write(
-            "export LD_LIBRARY_PATH=$SAVE_LDLP:`pwd`/../../build/lib:`pwd`/../../build/bin:`pwd`/build/bin:`pwd`/../../build/bin_dce:`pwd`/../../build/lib:`pwd`/../../build/bin:`pwd`/build/bin:`pwd`/../../build/bin_dce:`pwd`/build/lib:`pwd`/build/lib:`pwd`/build/bin:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/lib:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/bin"
+            "export"
+            " LD_LIBRARY_PATH=$SAVE_LDLP:`pwd`/../../build/lib:`pwd`/../../build/bin:`pwd`/build/bin:`pwd`/../../build/bin_dce:`pwd`/../../build/lib:`pwd`/../../build/bin:`pwd`/build/bin:`pwd`/../../build/bin_dce:`pwd`/build/lib:`pwd`/build/lib:`pwd`/build/bin:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/lib:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/bin"
             + "\n"
         )
         pbsFile.write(
-            "export DCE_PATH=$SAVE_DCE:`pwd`/build/bin_dce:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/sbin:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/bin_dce:/usr/lib/gcc/x86_64-redhat-linux/4.4.6::`pwd`/../../build/lib:`pwd`/../../build/bin:`pwd`/build/bin:`pwd`/../../build/bin_dce:`pwd`/../../build/lib:`pwd`/../../build/bin:`pwd`/build/bin:`pwd`/../../build/bin_dce:`pwd`/build/lib:`pwd`/build/lib:`pwd`/build/bin:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/lib:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/bin"
+            "export"
+            " DCE_PATH=$SAVE_DCE:`pwd`/build/bin_dce:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/sbin:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/bin_dce:/usr/lib/gcc/x86_64-redhat-linux/4.4.6::`pwd`/../../build/lib:`pwd`/../../build/bin:`pwd`/build/bin:`pwd`/../../build/bin_dce:`pwd`/../../build/lib:`pwd`/../../build/bin:`pwd`/build/bin:`pwd`/../../build/bin_dce:`pwd`/build/lib:`pwd`/build/lib:`pwd`/build/bin:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/lib:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build/bin"
             + "\n"
         )
         pbsFile.write(
-            "export DCE_ROOT=$SAVE_DCE_ROOT:`pwd`/build:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build"
+            "export"
+            " DCE_ROOT=$SAVE_DCE_ROOT:`pwd`/build:/panfs/pfs.acf.ku.edu/work/siddharth/ns-3/dce-Nov15/dce/build"
             + "\n"
         )
         pbsFile.write("cd " + work_dir + "\n")

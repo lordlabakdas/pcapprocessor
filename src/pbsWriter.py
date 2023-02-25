@@ -12,12 +12,11 @@
 ##
 
 import os
-import pdb
 
 
 def pbsWriter(configFile):
-    emailID = "siddharth@ittc.ku.edu"
-    work_dir = "/work/siddharth/ns-3/dce-Aug23/dce/source/ns-3-dce/"
+    emailID = ""
+    work_dir = ""
     tcpVariants = ["bic"]
     scenario = ["error"]
     # tcpVariants = ["bic", "cubic", "highspeed", "htcp", "hybla", "Illinois", "lp", "reno", "scalable", "westwood", "vegas", "yeah"]
@@ -53,11 +52,13 @@ def pbsWriter(configFile):
             pbsFile.write("SAVE_LDLP=$LD_LIBRARY_PATH" + "\n")
             pbsFile.write("SAVE_DCE=$DCE_PATH" + "\n")
             pbsFile.write(
-                "export LD_LIBRARY_PATH=$SAVE_LDLP:`pwd`/../../../build/lib:`pwd`/../../../build/bin:`pwd`/../build/bin:`pwd`/../../../build/bin_dce"
+                "export"
+                " LD_LIBRARY_PATH=$SAVE_LDLP:`pwd`/../../../build/lib:`pwd`/../../../build/bin:`pwd`/../build/bin:`pwd`/../../../build/bin_dce"
                 + "\n"
             )
             pbsFile.write(
-                "export DCE_PATH=$SAVE_DCE:`pwd`/../build/bin_dce:`pwd`../../../../dce/build/sbin:`pwd`../../../../dce/build/bin_dce:`pwd`/../build/lib:`pwd`/../build/bin:`pwd`../../../../dce/build/lib:`pwd`../../../../dce/build/bin"
+                "export"
+                " DCE_PATH=$SAVE_DCE:`pwd`/../build/bin_dce:`pwd`../../../../dce/build/sbin:`pwd`../../../../dce/build/bin_dce:`pwd`/../build/lib:`pwd`/../build/bin:`pwd`../../../../dce/build/lib:`pwd`../../../../dce/build/bin"
                 + "\n"
             )
             pbsFile.write("cd " + work_dir + "\n")
