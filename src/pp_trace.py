@@ -25,9 +25,9 @@ import exe_comm
 from ConfigParser import *
 from numpy import *
 
+
 # input to this fuction are, a pcap file and date rate unit
 def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
-
     # supported data rate units are : KB, Kb, MB, Mb, GB, Gb
     # anything other are treated as b/s
 
@@ -87,7 +87,6 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
     # following parsing is dependent on the tcptrace long format.
     result_str = "\n"
     for i in range(len(connections_list)):
-
         flow_cmp_time = 0
         try:
             time_stamp = pcap_trace_lines[matches[i] - 2].split()[-1]

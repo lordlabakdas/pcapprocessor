@@ -15,6 +15,7 @@ import csv
 from numpy import *
 from ConfigParser import *
 
+
 # write metrics statistics along with labels to csv file
 def csvWriter(metrics, xArray, scenario, config, pcapFile):
     transProt = config.get(scenario, "transProt").split(",")
