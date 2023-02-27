@@ -30,12 +30,9 @@ def bfsRunner(configFile, scenario):
     xscale = config.get(scenario, scenario).split(",")
     numFlows = len(config.get(scenario, "transProt").split(","))
     runs = config.getint(scenario, "runs")
-    # pdb.set_trace()
     numMetrics = 12
     # convert xscale to a 1D array
-    # pdb.set_trace()
     xArray = xscaleArray(xscale)
-    # for prot in transProt:
     # zeros matrix of needed dimensions to store metrics statistics
     stats = zeros(shape=(numFlows, 3, numMetrics))
     metrics = zeros(shape=(numFlows, len(xArray), numMetrics * 3))
@@ -43,10 +40,8 @@ def bfsRunner(configFile, scenario):
         # calculate stats for each run and store as a matrix of size (pcapFiles, runs, numMetrics)
         (runStats, pcapFiles) = cmdRunner(x, numMetrics, scenario, config)
         # calculate avg, std and conf Int for the run stats over all runs
-        #    pdb.set_trace()
         for p in range(len(pcapFiles)):
             stats[p, :, :] = metricStats(runStats[p, :, :], numMetrics, runs)
-            # pdb.set_trace();
             # rearrange values to follow avg, std, confInt for each metric for each pcap for each x value
             metrics[p, xscale.index(x)] = array(
                 stats[p, :, :].reshape(1, numMetrics * 3, order="F").copy()

@@ -15,27 +15,14 @@ import os
 
 
 def cfgPbsWriter(configFile, jobsDir):
-    emailID = "siddharth@ittc.ku.edu"
-    work_dir = "/work/siddharth/ns-3/dce-Nov15/dce/source/ns-3-dce/"
-    # tcpVariants = ["bic"]
-    #    scenario = [configFile[:5]]
+    emailID = ""
+    work_dir = ""
     scenario = configFile.split("_", 1)[0]
-    # tcpVariants = ["bic", "cubic", "highspeed", "htcp", "hybla", "Illinois", "lp", "reno", "scalable", "westwood", "vegas", "yeah"]
-    # scenario = ["error", "bandwidth", "bottleneckDelay", "bottleneckSpeed"]
-    # driverFileName = "driver.sh"
     nodeSpecs = "#PBS -l nodes=1:ppn=2,mem=2000M,walltime=120:0:0"
-    # jobsDir = "mul-flows-Jan15_11-18"
     cfgID = configFile[:-4]
-    # print tcpVariants
-    #############################################################################################################################################
     if not os.path.exists(jobsDir):
         os.makedirs(jobsDir)
-
-    #    driverFileName = os.path.join(jobsDir, driverFileName) (change this behavior using *configFile)
-    #    driverFile = open(driverFileName, "wb") (change this behavior using *configFile)
-
     for scen in scenario:
-        # uniqueID = cfgName + "_" + tcp +  "_" + scen
         runDir = "/tmp/" + "tmp_" + cfgID
         runCmd = "python " + work_dir + "dceRunner.py " + configFile + " " + scenario
         pbsFiName = cfgID + ".pbs"
@@ -82,14 +69,5 @@ def cfgPbsWriter(configFile, jobsDir):
         pbsFile.write("mv *.csv *.mon " + work_dir + "\n")
         pbsFile.write("cd " + runDir + "\n")
         pbsFile.write("rm -rf " + runDir + "\n")
-        #        pbsFile.write ("cd " + work_dir + jobsDir + "\n")
-        #        pbsFile.write ("mkdir cfg csv logs mon pbs" + "\n")
-        #        pbsFile.write ("mv ../*.cfg cfg" + "\n")
-        #        pbsFile.write ("mv ../*.mon mon" + "\n")
-        #        pbsFile.write ("mv ../*.csv csv" + "\n")
-        #        pbsFile.write ("mv *.pbs pbs" + "\n")
-        #        pbsFile.write ("mv *.sh pbs" + "\n")
-        #        pbsFile.write ("mv ../*.o* logs" + "\n")
         pbsFile.close()
-        # driverFile.write ("qsub " + pbsFiName + "\n") (change this behavior using *configFile)
-    # driverFile.close () (change this behavior using *configFile)
+

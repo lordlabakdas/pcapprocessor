@@ -15,7 +15,6 @@ from numpy import *
 
 
 def xscaleArray(xscale):
-    # pdb.set_trace()
     xscaleArray = array(map(float, xscale))
     xArray = xscaleArray.reshape(len(xscaleArray), 1)
     xArray = xArray.flatten()

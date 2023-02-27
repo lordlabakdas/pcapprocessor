@@ -18,10 +18,8 @@ from scipy import stats
 # function to calculate error bars using 95% confidence intervals
 def ConfInt(data):
     data = data.flatten()
-    # data= array([1,2,3,444,5555,444,6,7,8]) # test array
     n, min_max, mean, var, skew, kurt = stats.describe(data)
     std = math.sqrt(var)
-    # using t-distribution calculate intervals of error bars
     tTables = {
         "2": 4.3027,
         "3": 3.1824,
@@ -59,11 +57,4 @@ def ConfInt(data):
     else:
         mul = 1.95
     R = 2 * mul * std / (math.sqrt(sampleSz))
-
-    # R = stats.t.interval(0.95,len(data)-1,loc=mean,scale=std/math.sqrt(len(data)))
-    # R = array(R).flatten()
-    # print "error bar intervals ", R
-    # get length of error bars
-    # errorBars = R[1]-R[0]
-    # print "error bars is ", errorBars
     return R

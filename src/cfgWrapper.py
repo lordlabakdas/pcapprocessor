@@ -15,27 +15,21 @@ import os
 import cfgPbsWriter
 from cfgPbsWriter import *
 
-######################################################################################################
-# Initialize config parameters
+
 scenario = "error"
-# error = "error = 0,0.0000001,0.000001,0.00001,0.0001,0.001,0.01"
-# error = "error = 0"
 error = [0]
 script = "script = single-multiple-flow"
 simTime = [600]
-# simTime = [600,1200,1800]
 runs = "runs = 1"
 pktSize = "pktSize = 1500"
 accessSpeed = "accessSpeed = 10Gbps"
 accessDelay = "accessDelay = 0.1ms"
 pcapFile = "pcapFile = /tmp/"
 csvName = "csvName = "
-# qSize = [1]
 qSize = [0.2, 0.4, 0.6, 0.8, 1]
 outputFactor = "outputFactor = Mb"
 dceProt = "dceProt = "
 qSizeFileName = "qSizeFileName = "
-# qSizeFileName = 'qMonitoring = '
 cmd = (
     "cmd = /work/siddharth/ns-3/dce-Nov15/dce/source/ns-3-dce/build/bin/%(script)s"
     " --error=%(x)s --seed=%(runNo)s --pktSize=%(pktSize)s"
@@ -46,14 +40,8 @@ cmd = (
     " --qSizeFileName=%(qSizeFileName)s"
 )
 speed = [2000, 4000, 6000, 8000, 10000]
-# speed=[200,400,600,800]
-# speed = [200,400,600,800,1000]
 speedUnit = "Mbps"
 delay = [10, 50, 100, 150, 200, 250]
-# delay=[50,100,150,200,250]
-# delay = [10,50,100,150,200,250]
-# for multiple flows
-# tcpVariants = ["cubic,reno"]
 tcpVariants = [
     "bic,bic",
     "cubic,cubic",
@@ -70,26 +58,11 @@ tcpVariants = [
     "scalable,reno",
     "illinois,reno",
 ]
-# for single flow
-# tcpVariants = ["cubic", "bic"]
-# tcpVariants = ["bic", "cubic", "highspeed", "htcp", "hybla", "Illinois", "lp", "reno", "scalable", "westwood", "vegas", "yeah", "veno"]
-# tcpVariants = ["bic", "cubic", "highspeed", "htcp", "Illinois", "scalable", "yeah"]
-# tcpVariants = ["bic,bic","cubic,cubic","htcp,htcp","highspeed,highspeed","yeah,yeah","scalable,scalable","illinois,illinois"]
 delayUnit = "ms"
 
-########################################################################################################
-########################################################################################################
-# Create pbs scripts for *.cfg files in the created directory
-# os.chdir(cfgDir)
 jobsDir = "mul-flows-Jan15_11-18"  # look into this later
 driverFileName = "driver.sh"
 driverFileName = os.path.join(jobsDir, driverFileName)
-
-# for files in os.listdir("."):
-#    if files.endswith(".cfg"):
-#        cfgPbsWriter (files, jobsDir, tcpVariants)
-
-#########################################################################################################
 
 # Write config files in current directory
 

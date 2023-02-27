@@ -19,8 +19,6 @@ def pbsWriter(configFile):
     work_dir = ""
     tcpVariants = ["bic"]
     scenario = ["error"]
-    # tcpVariants = ["bic", "cubic", "highspeed", "htcp", "hybla", "Illinois", "lp", "reno", "scalable", "westwood", "vegas", "yeah"]
-    # scenario = ["error", "bandwidth", "bottleneckDelay", "bottleneckSpeed"]
     driverFileName = "driver.sh"
     nodeSpecs = "#PBS -l nodes=1:ppn=2,mem=1000M"
     jobsDir = "initial-test"

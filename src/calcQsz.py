@@ -60,5 +60,4 @@ def calcQsz(scenario, x, config):
         queue_size = str(
             int(bdpQsz * bottleneckSpeed * 2 * 0.001 * bottleneckDelay / 8)
         )
-    #    queue_size = "2000000"
     return queue_size

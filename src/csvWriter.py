@@ -19,17 +19,7 @@ from ConfigParser import *
 # write metrics statistics along with labels to csv file
 def csvWriter(metrics, xArray, scenario, config, pcapFile):
     transProt = config.get(scenario, "transProt").split(",")
-    # csvName = config.get(scenario, 'csvName') + '_' + pcapFile + '.csv'
-    # pdb.set_trace()
     pcapName = config.get(scenario, "pcapFile")
-    #    pdb.set_trace()
-    #    pcapFile = pcapFile.strip(pcapName + '-')
-    #    pdb.set_trace()
-    #    pcapFile = pcapFile.strip('-0.pcap')
-    #    pdb.set_trace()
-    #    for i in range(len(dceProt)):
-    #        if int(pcapFile)==i+2:
-    #            prot = dceProt[i] + str(i)
     for i in range(len(transProt)):
         if (pcapName + "-" + str(i) + "-0.pcap") == pcapFile:
             prot = transProt[i] + str(i)
@@ -75,7 +65,6 @@ def csvWriter(metrics, xArray, scenario, config, pcapFile):
             "confInt_flow_cmp_time",
         ]
     ]
-    # add xscale to array for plotting in x axis
     metrics = column_stack((xArray, metrics))
     labeldMetrics = vstack((labels, metrics))
     with open(csvName, "wb") as fl:

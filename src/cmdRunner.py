@@ -17,9 +17,6 @@ from exe_comm import *
 from ConfigParser import *
 import wafCmd
 from wafCmd import *
-
-# pptrace_path = os.path.abspath('/raid5/sgondi/transport/santoshg')
-# sys.path.append(pptrace_path)
 import pp_trace
 from pp_trace import *
 import glob
@@ -52,12 +49,5 @@ def cmdRunner(x, numMetrics, scenario, config):
             )
             #       pdb.set_trace()
             exe_com(shlex.split("rm " + pcapFiles[p]))
-    # at the end, runStats would have a size of (len(pcapFiles), runs, numMetrics)
-    # print runStats
     return (runStats, pcapFiles)
 
-
-# Alternate way, might be useful for multi-threading
-#        wafDir = os.cwd()
-#        os.chdir('/tmp/')
-#   os.chdir(wafDir)
