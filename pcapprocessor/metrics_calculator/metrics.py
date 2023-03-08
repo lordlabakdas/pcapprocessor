@@ -1,2 +1,2 @@
-class MetricsCalculator(object):
+class MetricsCalculator:
     pass

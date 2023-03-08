@@ -1,4 +1,4 @@
-class StreamStats(object):
+class StreamStats:
     def __init__(self):
         self.start_time = None
         self.end_time = None

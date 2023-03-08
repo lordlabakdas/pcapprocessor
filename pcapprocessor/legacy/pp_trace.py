@@ -38,8 +38,6 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
     scale_unit = scale_dict[first] if first in scale_dict else 1
     byte_unit = byte_dict[second] if second in byte_dict else 1
     fact_by = scale_unit * byte_unit
-    # config = ConfigParser()
-    # config.read(config_file)
     sp = config.get(scenario, "bottleneckSpeed")
     # extract the numeric value from bottleneck field
     bn_speed = int(re.search(r"(\d+)", sp).group())
@@ -87,7 +85,7 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
 
     # following parsing is dependent on the tcptrace long format.
     result_str = "\n"
-    for i in range(len(connections_list)):
+    for i, item in enumerate(connections_list):
         flow_cmp_time = 0
         try:
             time_stamp = pcap_trace_lines[matches[i] - 2].split()[-1]
@@ -97,9 +95,6 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
             ) * 1000 + (t.time().microsecond / 1000)
         except:
             print("Couldn't parse the flow completion time")
-
-        item = connections_list[i]
-        item[0]
         labels = item[1].split(",")
         values = item[3].split(",")
 
@@ -145,7 +140,6 @@ def pp_trace(pcap_file, unit, config, scenario, ascii_trace_file, buf_size):
         # b -> a: TODO
         # print (result_str)
     return result_str
-    # fl.close()
 
 
 # Testing

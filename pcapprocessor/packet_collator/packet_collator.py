@@ -19,5 +19,4 @@ class PacketCollator(StreamStats):
         for packet in self.packet_stream:
             self.connection_times()
             self.total_bytes += int(packet.length)
-            # self.total_payload_bytes = int(packet.tcp.payload_length)
             return self

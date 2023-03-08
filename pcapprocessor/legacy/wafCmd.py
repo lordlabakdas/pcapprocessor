@@ -23,7 +23,7 @@ def wafCmd(runNo, x, scenario, config):
         qMonitoring = 1
     else:
         qMonitoring = 0
-    if scenario == "bottleneckDelay" or scenario == "changingDelay":
+    if scenario in ("bottleneckDelay", "changingDelay"):
         x = x + "ms"
     elif scenario == "bottleneckSpeed":
         x = x + "Mbps"
