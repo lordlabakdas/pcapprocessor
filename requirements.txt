@@ -8,7 +8,6 @@ importlib-metadata==4.8.1
 iniconfig==1.1.1
 nodeenv==1.6.0
 numpy==1.22.0
-packaging==21.0
 platformdirs==2.4.0
 pluggy==1.0.0
 pre-commit==2.15.0
