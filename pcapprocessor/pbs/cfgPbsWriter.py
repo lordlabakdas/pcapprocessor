@@ -70,4 +70,3 @@ def cfgPbsWriter(configFile, jobsDir):
         pbsFile.write("cd " + runDir + "\n")
         pbsFile.write("rm -rf " + runDir + "\n")
         pbsFile.close()
-

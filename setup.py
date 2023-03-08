@@ -15,4 +15,3 @@ setup(
     install_requires=requirements,
     packages=["pcapprocessor"],
 )
-

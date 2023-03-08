@@ -11,9 +11,9 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-from ConfigParser import *
 import calcQsz
 from calcQsz import *
+from ConfigParser import *
 
 
 def wafCmd(runNo, x, scenario, config):

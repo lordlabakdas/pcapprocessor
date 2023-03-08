@@ -1,0 +1,2 @@
+class MetricsCalculator(object):
+    pass

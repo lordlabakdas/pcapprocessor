@@ -13,11 +13,12 @@
 
 import sys
 from sys import *
-import pbsWriter
-from pbsWriter import *
-from ConfigParser import *
+
 import bfsRunner
+import pbsWriter
 from bfsRunner import *
+from ConfigParser import *
+from pbsWriter import *
 
 try:
     configFile = sys.argv[1]

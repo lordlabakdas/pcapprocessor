@@ -17,10 +17,11 @@
 #         queue_mean, queue_variance, queue_percentage, flow_cmp_time, numpy_obj ]
 
 
-import re
-import sys
 import datetime
+import re
 import shlex
+import sys
+
 import exe_comm
 from ConfigParser import *
 from numpy import *
