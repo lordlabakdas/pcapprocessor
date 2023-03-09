@@ -11,17 +11,17 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-from numpy import *
-import ConfigParser
-from ConfigParser import *
-import xscaleArray
-from xscaleArray import *
 import cmdRunner
-from cmdRunner import *
-import metricStats
-from metricStats import *
+import ConfigParser
 import csvWriter
+import metricStats
+import xscaleArray
+from cmdRunner import *
+from ConfigParser import *
 from csvWriter import *
+from metricStats import *
+from numpy import *
+from xscaleArray import *
 
 
 def bfsRunner(configFile, scenario):

@@ -12,9 +12,9 @@
 ##
 
 import os
+
 import cfgPbsWriter
 from cfgPbsWriter import *
-
 
 scenario = "error"
 error = [0]

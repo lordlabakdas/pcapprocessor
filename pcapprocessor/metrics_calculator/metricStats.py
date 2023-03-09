@@ -11,8 +11,8 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-from numpy import *
 from confInt import *
+from numpy import *
 
 
 def metricStats(runStats, numMetrics, runs):

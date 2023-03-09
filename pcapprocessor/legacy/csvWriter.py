@@ -12,17 +12,18 @@
 ##
 
 import csv
-from numpy import *
+
 from ConfigParser import *
+from numpy import *
 
 
 # write metrics statistics along with labels to csv file
 def csvWriter(metrics, xArray, scenario, config, pcapFile):
     transProt = config.get(scenario, "transProt").split(",")
     pcapName = config.get(scenario, "pcapFile")
-    for i in range(len(transProt)):
+    for i, item in enumerate(transProt):
         if (pcapName + "-" + str(i) + "-0.pcap") == pcapFile:
-            prot = transProt[i] + str(i)
+            prot = item + str(i)
     csvName = config.get(scenario, "csvName") + "_" + prot + ".csv"
     labels = [
         [
@@ -69,6 +70,5 @@ def csvWriter(metrics, xArray, scenario, config, pcapFile):
     labeldMetrics = vstack((labels, metrics))
     with open(csvName, "wb") as fl:
         writer = csv.writer(fl, delimiter="\t")
-        print
         "Saving to file"
         writer.writerows(labeldMetrics)

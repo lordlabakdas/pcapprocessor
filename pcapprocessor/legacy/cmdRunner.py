@@ -11,16 +11,17 @@
 ## The University of Kansas Lawrence, KS USA.
 ##
 
-from numpy import *
-import shlex
-from exe_comm import *
-from ConfigParser import *
-import wafCmd
-from wafCmd import *
-import pp_trace
-from pp_trace import *
 import glob
+import shlex
 from glob import *
+
+import pp_trace
+import wafCmd
+from ConfigParser import *
+from exe_comm import *
+from numpy import *
+from pp_trace import *
+from wafCmd import *
 
 
 def cmdRunner(x, numMetrics, scenario, config):
@@ -32,7 +33,6 @@ def cmdRunner(x, numMetrics, scenario, config):
     runStats = zeros(shape=(numFlows, runs, numMetrics))
     for run in range(runs):
         runNo = str(run + 1)
-        # pdb.set_trace()
         waf_cmd, qSize = wafCmd(runNo, x, scenario, config)
         print(waf_cmd)
         # execute waf command
@@ -41,13 +41,11 @@ def cmdRunner(x, numMetrics, scenario, config):
         asciiFile = glob(asciiFileName)
         # pdb.set_trace()
         # execute tcptrace command
-        for p in range(len(pcapFiles)):
+        for p, item in enumerate(pcapFiles):
             runStats[p, run, :] = array(
                 pp_trace(
-                    pcapFiles[p], outputFactor, config, scenario, asciiFile[0], qSize
+                    item, outputFactor, config, scenario, asciiFile[0], qSize
                 )
             )
-            #       pdb.set_trace()
-            exe_com(shlex.split("rm " + pcapFiles[p]))
+            exe_com(shlex.split("rm " + item))
     return (runStats, pcapFiles)
-
