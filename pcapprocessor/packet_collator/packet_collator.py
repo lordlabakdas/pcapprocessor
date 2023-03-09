@@ -1,6 +1,6 @@
 import pyshark
 
-from pcapprocessor.stream_stats import StreamStats
+from pcapprocessor.packet_collator.stream_stats import StreamStats
 
 
 class PacketCollator(StreamStats):
@@ -19,4 +19,4 @@ class PacketCollator(StreamStats):
         for packet in self.packet_stream:
             self.connection_times()
             self.total_bytes += int(packet.length)
-            return self
+        return self

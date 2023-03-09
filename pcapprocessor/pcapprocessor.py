@@ -3,6 +3,7 @@ from pathlib import Path
 import pyshark
 
 from pcapprocessor.packet_collator import PacketCollator
+from pcapprocessor.metrics_calculator.metrics_calculator import MetricsCalculator
 
 
 class PcapProcessor:
@@ -15,4 +16,5 @@ class PcapProcessor:
             self.pcap_file_path, keep_packets=False
         )
         packet_collator_obj = PacketCollator(packet_stream=packet_stream)
-        packet_collator: PacketCollator = packet_collator_obj.collate()
+        packet_collator_obj: PacketCollator = packet_collator_obj.collate()
+        metrics_calculator_obj: MetricsCalculator = MetricsCalculator(packet_collator_obj.__dict__)
