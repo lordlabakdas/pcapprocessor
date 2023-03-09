@@ -1,2 +1,2 @@
-class MetricsCalculator:
-    pass
+class Metrics(object):
+    throughput = None
