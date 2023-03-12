@@ -1,9 +1,11 @@
 from pathlib import Path
+from typing import Dict
 
 import pyshark
 
-from pcapprocessor.packet_collator import PacketCollator
+from pcapprocessor.packet_collator.packet_collator import PacketCollator
 from pcapprocessor.metrics_calculator.metrics_calculator import MetricsCalculator
+from render.render import Render
 
 
 class PcapProcessor:
@@ -13,8 +15,11 @@ class PcapProcessor:
 
     def process(self) -> pyshark.FileCapture:
         packet_stream: pyshark.FileCapture = pyshark.FileCapture(
-            self.pcap_file_path, keep_packets=False
+            self.pcap_file_path.as_posix(), keep_packets=False
         )
         packet_collator_obj = PacketCollator(packet_stream=packet_stream)
         packet_collator_obj: PacketCollator = packet_collator_obj.collate()
-        metrics_calculator_obj: MetricsCalculator = MetricsCalculator(packet_collator_obj.__dict__)
+        metrics_calculator_obj: MetricsCalculator = MetricsCalculator(**packet_collator_obj.__dict__)
+        metrics: Dict = metrics_calculator_obj.__dict__
+        viz_obj: Render = Render(data=metrics)
+        viz_obj.viz()
