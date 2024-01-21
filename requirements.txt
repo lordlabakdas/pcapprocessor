@@ -12,3 +12,4 @@ pyshark==0.5.3
 setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
 pydantic==1.10.6
 dash==2.8.1
+pillow>=10.2.0 # not directly required, pinned by Snyk to avoid a vulnerability
