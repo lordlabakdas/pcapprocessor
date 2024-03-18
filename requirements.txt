@@ -5,7 +5,7 @@ PyYAML==5.4.1
 scipy==1.10.1
 flask==2.2.3
 ruff==0.0.252
-black==23.1.0
+black==24.3.0
 isort==5.12.0
 seaborn==0.12.2
 pyshark==0.5.3
