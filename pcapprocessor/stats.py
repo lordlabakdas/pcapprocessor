@@ -31,8 +31,7 @@ class XScaleArray:
         self.xscale = xscale
 
     def to_array(self) -> np.ndarray:
-        arr = np.array(list(map(float, self.xscale)))
-        return arr.reshape(len(arr), 1).flatten()
+        return np.array(list(map(float, self.xscale)))
 
 
 class MetricStats:

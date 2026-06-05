@@ -1,4 +1,3 @@
-import math
 import numpy as np
 import pytest
 from pcapprocessor.stats import ConfidenceInterval, XScaleArray, MetricStats
