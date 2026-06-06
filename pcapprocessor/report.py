@@ -66,10 +66,8 @@ class Reporter:
 
         # Save figure
         out_path = os.path.join(self.output_dir, f"{metric}.{self.fmt}")
-        fig.savefig(out_path, bbox_inches="tight")
-
-        # Close figure
-        plt.close(fig)
-
-        # Return path
+        try:
+            fig.savefig(out_path, bbox_inches="tight")
+        finally:
+            plt.close(fig)
         return out_path
