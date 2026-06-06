@@ -1,8 +1,5 @@
 from setuptools import setup
 
-with open("requirements.txt") as f:
-    requirements = f.read().splitlines()
-
 setup(
     name="pcapprocessor",
     version="2.0.0",
@@ -12,6 +9,12 @@ setup(
     maintainer="Siddharth Gangadhar",
     maintainer_email="lordlabakdas.code@gmail.com",
     keywords="pcap, python, network, security, metrics, analysis",
-    install_requires=requirements,
+    install_requires=[
+        "numpy",
+        "scipy",
+        "pyshark",
+        "matplotlib",
+        "seaborn",
+    ],
     packages=["pcapprocessor"],
 )
