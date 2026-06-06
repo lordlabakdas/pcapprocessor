@@ -175,13 +175,22 @@ from pcapprocessor import PcapProcessor
 cfg = ConfigParser()
 cfg.read("sim.ini")
 
+# With an ns-3 ASCII queue trace (enables queue metrics)
 proc = PcapProcessor(
     pcap_file_path="results/flow-tcp0-0.pcap",
     unit="Mb",
     config=cfg,
     scenario="bottleneckDelay",
-    ascii_trace_file="queue0.tr",
-    buf_size=25000,
+    ascii_trace_file="queue0.tr",  # optional
+    buf_size=25000,                 # optional, required when ascii_trace_file is set
+)
+
+# Without a queue trace (queue metrics return 0.0)
+proc = PcapProcessor(
+    pcap_file_path="capture.pcap",
+    unit="Mb",
+    config=cfg,
+    scenario="bottleneckDelay",
 )
 
 # Returns a list of 12 raw metric values
@@ -201,6 +210,8 @@ proc.process_and_write(x_array, pcap_file="results/flow-tcp0-0.pcap")
  queue_variance, queue_percentage, flow_completion_ms]
 ```
 
+Queue metrics (positions 8–10) return `0.0` when `ascii_trace_file` is not provided.
+
 ---
 
 ### TraceProcessor
@@ -219,8 +230,8 @@ metrics = TraceProcessor(
     unit="Mb",
     config=cfg,
     scenario="bottleneckDelay",
-    ascii_trace_file="queue0.tr",
-    buf_size=25000,
+    ascii_trace_file="queue0.tr",  # optional
+    buf_size=25000,                 # optional, required when ascii_trace_file is set
 ).process()
 ```
 
