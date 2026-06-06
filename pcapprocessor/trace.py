@@ -1,5 +1,4 @@
 import re
-import sys
 import shlex
 import datetime
 
@@ -54,8 +53,7 @@ class TraceProcessor:
         ]
 
         if not matches:
-            print("No TCP connections found")
-            sys.exit()
+            raise ValueError("No TCP connections found in pcap file")
 
         connections = [
             pcap_lines[matches[j]: matches[j + 1]]

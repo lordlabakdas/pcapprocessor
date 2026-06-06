@@ -97,10 +97,10 @@ def test_process_b2a_path_returns_12_metrics(tmp_path):
     assert len(result) == 12
 
 
-def test_process_exits_on_no_connections(tmp_path):
+def test_process_raises_on_no_connections(tmp_path):
     proc = _make_processor(tmp_path)
     with patch("pcapprocessor.exe_comm.exe_comm", return_value="no tcp data here\n"):
-        with pytest.raises(SystemExit):
+        with pytest.raises(ValueError, match="No TCP connections found"):
             proc.process()
 
 
