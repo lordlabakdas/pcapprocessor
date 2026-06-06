@@ -73,3 +73,80 @@ def test_plot_metric_filename_uses_metric_name(tmp_path):
     r = Reporter(csvs=[], metrics=[], output_dir=out, fmt="svg")
     path = r._plot_metric("throughput", protocol_data)
     assert path == os.path.join(out, "throughput.svg")
+
+
+def test_plot_creates_one_file_per_metric(tmp_path):
+    for name in ("tcp0.csv", "udp0.csv"):
+        _write_csv(
+            tmp_path / name,
+            ["x-scale", "avg_throughput", "confInt_throughput",
+             "avg_delay", "confInt_delay"],
+            [[1.0, 10.0, 0.5, 5.0, 0.1], [2.0, 20.0, 0.8, 4.5, 0.2]],
+        )
+    out = str(tmp_path / "plots")
+    r = Reporter(
+        csvs=[str(tmp_path / "tcp0.csv"), str(tmp_path / "udp0.csv")],
+        metrics=["throughput", "delay"],
+        output_dir=out,
+    )
+    paths = r.plot()
+    assert len(paths) == 2
+    assert all(os.path.exists(p) for p in paths)
+    assert any("throughput" in p for p in paths)
+    assert any("delay" in p for p in paths)
+
+
+def test_plot_creates_output_dir(tmp_path):
+    _write_csv(
+        tmp_path / "tcp0.csv",
+        ["x-scale", "avg_throughput", "confInt_throughput"],
+        [[1.0, 10.0, 0.5]],
+    )
+    out = str(tmp_path / "new_dir" / "plots")
+    r = Reporter(csvs=[str(tmp_path / "tcp0.csv")],
+                 metrics=["throughput"], output_dir=out)
+    r.plot()
+    assert os.path.isdir(out)
+
+
+def test_reporter_importable_from_package():
+    from pcapprocessor import Reporter as R
+    assert R is not None
+
+
+def test_cli_exits_zero_on_success(tmp_path):
+    import subprocess
+    import sys as _sys
+    _write_csv(
+        tmp_path / "tcp0.csv",
+        ["x-scale", "avg_throughput", "confInt_throughput"],
+        [[10.0, 100.0, 5.0], [20.0, 200.0, 8.0]],
+    )
+    result = subprocess.run(
+        [_sys.executable, "-m", "pcapprocessor.report",
+         "--csvs", str(tmp_path / "tcp0.csv"),
+         "--metrics", "throughput",
+         "--output", str(tmp_path / "plots")],
+        capture_output=True, text=True,
+    )
+    assert result.returncode == 0
+    assert "throughput.png" in result.stdout
+
+
+def test_cli_exits_nonzero_on_missing_metric(tmp_path):
+    import subprocess
+    import sys as _sys
+    _write_csv(
+        tmp_path / "tcp0.csv",
+        ["x-scale", "avg_throughput", "confInt_throughput"],
+        [[10.0, 100.0, 5.0]],
+    )
+    result = subprocess.run(
+        [_sys.executable, "-m", "pcapprocessor.report",
+         "--csvs", str(tmp_path / "tcp0.csv"),
+         "--metrics", "nonexistent",
+         "--output", str(tmp_path / "plots")],
+        capture_output=True, text=True,
+    )
+    assert result.returncode == 1
+    assert "Error" in result.stderr

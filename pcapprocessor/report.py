@@ -18,7 +18,12 @@ class Reporter:
         self.fmt = fmt
 
     def plot(self) -> list:
-        raise NotImplementedError
+        os.makedirs(self.output_dir, exist_ok=True)
+        protocol_data = {
+            os.path.splitext(os.path.basename(path))[0]: self._load_csv(path)
+            for path in self.csvs
+        }
+        return [self._plot_metric(metric, protocol_data) for metric in self.metrics]
 
     def _load_csv(self, path: str) -> dict:
         with open(path, newline="") as f:
@@ -71,3 +76,37 @@ class Reporter:
         finally:
             plt.close(fig)
         return out_path
+
+if __name__ == "__main__":
+    import argparse
+    import sys
+
+    def _main() -> int:
+        parser = argparse.ArgumentParser(
+            description="Generate metric figures from pcapprocessor CSV output."
+        )
+        parser.add_argument("--csvs", nargs="+", required=True,
+                            help="Paths to metric CSV files (one per protocol)")
+        parser.add_argument("--metrics", nargs="+", required=True,
+                            help="Metric short names to plot (e.g. throughput delay)")
+        parser.add_argument("--output", default="plots",
+                            help="Output directory (default: plots)")
+        parser.add_argument("--format", choices=["png", "svg"], default="png",
+                            dest="fmt", help="Output format (default: png)")
+        args = parser.parse_args()
+
+        try:
+            paths = Reporter(
+                csvs=args.csvs,
+                metrics=args.metrics,
+                output_dir=args.output,
+                fmt=args.fmt,
+            ).plot()
+            for p in paths:
+                print(p)
+            return 0
+        except (FileNotFoundError, ValueError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+
+    sys.exit(_main())
