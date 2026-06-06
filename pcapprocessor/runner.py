@@ -1,3 +1,4 @@
+import os
 import shlex
 from configparser import ConfigParser
 from glob import glob
@@ -18,7 +19,7 @@ class SimulationRunner:
         self.scenario = scenario
         self.config = config
 
-    def run(self) -> tuple:
+    def run(self) -> tuple[np.ndarray, list]:
         runs = self.config.getint(self.scenario, "runs")
         pcap_name = self.config.get(self.scenario, "pcapFile")
         output_factor = self.config.get(self.scenario, "outputFactor")
@@ -34,6 +35,8 @@ class SimulationRunner:
 
             pcap_files = glob(pcap_name + "*.pcap")
             ascii_file = glob(ascii_file_name)
+            if not ascii_file:
+                raise ValueError(f"No ASCII trace files found matching: {ascii_file_name!r}")
 
             for p, item in enumerate(pcap_files):
                 run_stats[p, run, :] = np.array(
@@ -42,7 +45,7 @@ class SimulationRunner:
                         self.scenario, ascii_file[0], q_size,
                     ).process()
                 )
-                exe_comm.exe_comm(shlex.split("rm " + item), capture=False)
+                os.remove(item)
 
         return run_stats, pcap_files
 
