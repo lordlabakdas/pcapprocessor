@@ -5,7 +5,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="pcapprocessor",
-    version="1.0.0",
+    version="2.0.0",
     description="A simple PCAP processor",
     author="Siddharth Gangadhar, Truc Anh N Nguyen, Santosh Gondi",
     author_email="lordlabakdas.code@gmail.com",
