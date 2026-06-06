@@ -49,8 +49,8 @@ class TraceProcessor:
         unit: str,
         config,
         scenario: str,
-        ascii_trace_file: str,
-        buf_size: int,
+        ascii_trace_file: str = None,
+        buf_size: int = 0,
     ):
         self.pcap_file = pcap_file
         self.unit = unit
@@ -63,12 +63,16 @@ class TraceProcessor:
         fact_by = self._unit_factor()
         bn_speed = self._bottleneck_speed(fact_by)
 
-        pkt_size = int(self.config.get(self.scenario, "pktSize"))
-        with open(self.ascii_trace_file) as fl:
-            axis_y1 = [int(ln.strip().split(",")[1]) for ln in fl]
-        a = np.array(axis_y1)
-        queue_mean = float(a.mean())
-        queue_variance = float(a.var())
+        if self.ascii_trace_file is not None:
+            pkt_size = int(self.config.get(self.scenario, "pktSize"))
+            with open(self.ascii_trace_file) as fl:
+                axis_y1 = [int(ln.strip().split(",")[1]) for ln in fl]
+            a = np.array(axis_y1)
+            queue_mean = float(a.mean())
+            queue_variance = float(a.var())
+            queue_pct = round(queue_mean * 100.0 / (self.buf_size / pkt_size), 3)
+        else:
+            queue_mean = queue_variance = queue_pct = 0.0
 
         flow = self._dominant_flow()
         if flow is None:
@@ -89,7 +93,7 @@ class TraceProcessor:
             round(utilization, 3),
             round(queue_mean, 3),
             round(queue_variance, 3),
-            round(queue_mean * 100.0 / (self.buf_size / pkt_size), 3),
+            queue_pct,
             round(tx_time * 1000, 3),
         ]
 

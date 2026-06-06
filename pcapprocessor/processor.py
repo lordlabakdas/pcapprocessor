@@ -11,8 +11,8 @@ class PcapProcessor:
         unit: str,
         config,
         scenario: str,
-        ascii_trace_file: str,
-        buf_size: int,
+        ascii_trace_file: str = None,
+        buf_size: int = 0,
     ):
         self.pcap_file_path = str(Path(pcap_file_path))
         self.unit = unit

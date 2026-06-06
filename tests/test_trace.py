@@ -192,3 +192,20 @@ def test_process_raises_on_no_connections(tmp_path):
     with patch("pcapprocessor.trace.pyshark.FileCapture", return_value=_mock_cap([])):
         with pytest.raises(ValueError, match="No TCP connections found"):
             proc.process()
+
+
+def test_process_without_ascii_trace_returns_zero_queue_metrics(tmp_path):
+    cfg = _make_config()
+    proc = TraceProcessor(
+        pcap_file="dummy.pcap",
+        unit="MB",
+        config=cfg,
+        scenario="myScenario",
+    )
+    pkts = [_fake_pkt(payload_len=1000, ts=0.0), _fake_pkt(payload_len=1000, ts=1.0)]
+    with patch("pcapprocessor.trace.pyshark.FileCapture", return_value=_mock_cap(pkts)):
+        result = proc.process()
+    assert len(result) == 12
+    assert result[8] == 0.0   # queue_mean
+    assert result[9] == 0.0   # queue_variance
+    assert result[10] == 0.0  # queue_percentage
