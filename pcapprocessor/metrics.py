@@ -38,8 +38,8 @@ class MetricsWriter:
     def _resolve_csv_name(self) -> str:
         trans_prots = self.config.get(self.scenario, "transProt").split(",")
         pcap_base = self.config.get(self.scenario, "pcapFile")
-        prot = ""
         for i, item in enumerate(trans_prots):
             if (pcap_base + "-" + item + str(i) + "-0.pcap") == self.pcap_file:
                 prot = item + str(i)
-        return self.config.get(self.scenario, "csvName") + "_" + prot + ".csv"
+                return self.config.get(self.scenario, "csvName") + "_" + prot + ".csv"
+        raise ValueError(f"pcap file {self.pcap_file!r} does not match any protocol in {trans_prots}")
