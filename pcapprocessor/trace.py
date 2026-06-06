@@ -1,10 +1,43 @@
 import re
-import shlex
-import datetime
+from collections import defaultdict
 
 import numpy as np
+import pyshark
 
-from pcapprocessor import exe_comm
+
+class _FlowAccumulator:
+    """Accumulates per-packet stats for one TCP flow direction."""
+
+    def __init__(self):
+        self.tx_packets = 0
+        self.unique_bytes = 0
+        self.rexmt_packets = 0
+        self.first_ts = None
+        self.last_ts = None
+        self.rtt_samples = []
+
+    def add_packet(self, ts: float, payload_len: int, is_retrans: bool, rtt_ms) -> None:
+        if self.first_ts is None:
+            self.first_ts = ts
+        self.last_ts = ts
+        if payload_len > 0:
+            self.tx_packets += 1
+            if is_retrans:
+                self.rexmt_packets += 1
+            else:
+                self.unique_bytes += payload_len
+        if rtt_ms is not None:
+            self.rtt_samples.append(rtt_ms)
+
+    @property
+    def tx_time(self) -> float:
+        if self.first_ts is None:
+            return 0.0
+        return max(self.last_ts - self.first_ts, 0.0)
+
+    @property
+    def avg_rtt_ms(self) -> float:
+        return float(np.mean(self.rtt_samples)) if self.rtt_samples else 0.0
 
 
 class TraceProcessor:
@@ -30,84 +63,66 @@ class TraceProcessor:
         fact_by = self._unit_factor()
         bn_speed = self._bottleneck_speed(fact_by)
 
-        print("Processing ascii trace output")
         pkt_size = int(self.config.get(self.scenario, "pktSize"))
-        with open(self.ascii_trace_file, "r") as fl:
-            lines = list(fl)
-        axis_y1 = [int(line.strip().split(",")[1]) for line in lines]
+        with open(self.ascii_trace_file) as fl:
+            axis_y1 = [int(ln.strip().split(",")[1]) for ln in fl]
         a = np.array(axis_y1)
-        queue_mean = a.mean()
-        queue_variance = a.var()
+        queue_mean = float(a.mean())
+        queue_variance = float(a.var())
 
-        trace_cmd = "tcptrace -l -r -n -W --csv " + self.pcap_file
-        print("Executing tcptrace command. it may take few seconds")
-        result = exe_comm.exe_comm(shlex.split(trace_cmd))
-        print("Processing trace output")
-
-        pcap_lines = result.split("\n")
-        regex_con = re.compile(r"#([0-9]*) TCP connection traced:")
-        matches = [
-            pcap_lines.index(ln)
-            for ln in pcap_lines
-            if re.match(regex_con, ln)
-        ]
-
-        if not matches:
+        flow = self._dominant_flow()
+        if flow is None:
             raise ValueError("No TCP connections found in pcap file")
 
-        connections = [
-            pcap_lines[matches[j]: matches[j + 1]]
-            for j in range(len(matches) - 1)
+        tx_time = flow.tx_time
+        throughput = flow.unique_bytes / tx_time if tx_time > 0 else 0.0
+        utilization = throughput * 100.0 / bn_speed if bn_speed > 0 else 0.0
+
+        return [
+            flow.tx_packets,
+            self.PACKET_OVERHEAD * flow.tx_packets,
+            round(throughput / fact_by, 3),
+            round(flow.avg_rtt_ms / 2, 3),
+            round(throughput * 8 / fact_by, 3),
+            flow.unique_bytes,
+            flow.rexmt_packets,
+            round(utilization, 3),
+            round(queue_mean, 3),
+            round(queue_variance, 3),
+            round(queue_mean * 100.0 / (self.buf_size / pkt_size), 3),
+            round(tx_time * 1000, 3),
         ]
-        connections.append(pcap_lines[matches[-1]:])
 
-        result_str = "\n"
-        for i, item in enumerate(connections):
-            flow_cmp_time = 0
-            try:
-                time_stamp = pcap_lines[matches[i] - 2].split()[-1]
-                t = datetime.datetime.strptime(time_stamp, "%H:%M:%S.%f")
-                flow_cmp_time = (
-                    t.time().hour * 3600 + t.time().minute * 60 + t.time().second
-                ) * 1000 + t.time().microsecond / 1000
-            except Exception:
-                print("Couldn't parse the flow completion time")
+    def _dominant_flow(self):
+        """Return the flow accumulator with the most unique bytes, or None."""
+        flows = defaultdict(_FlowAccumulator)
+        cap = pyshark.FileCapture(
+            self.pcap_file,
+            display_filter="tcp",
+            keep_packets=False,
+        )
+        try:
+            for pkt in cap:
+                self._process_packet(pkt, flows)
+        finally:
+            cap.close()
+        if not flows:
+            return None
+        best = max(flows.values(), key=lambda f: f.unique_bytes)
+        return best if best.unique_bytes > 0 else None
 
-            labels = item[1].split(",")
-            values = item[3].split(",")
-
-            conn_suffix = "a2b"
-            if int(values[labels.index("unique_bytes_sent_a2b")]) <= 0:
-                conn_suffix = "b2a"
-
-            tx_packets = int(values[labels.index("total_packets_" + conn_suffix)])
-            rexmt_packets = int(values[labels.index("rexmt_data_pkts_" + conn_suffix)])
-            overhead = self.PACKET_OVERHEAD * tx_packets
-            goodput = 8 * int(values[labels.index("throughput_" + conn_suffix)])
-            unique_bytes = int(values[labels.index("unique_bytes_sent_" + conn_suffix)])
-            tx_time = (1.0 * unique_bytes) / goodput
-            throughput = (
-                int(values[labels.index("actual_data_bytes_" + conn_suffix)]) / tx_time
-            )
-            rtt = float(values[labels.index("RTT_avg_" + conn_suffix)]) / 2
-            utilization = throughput * 100.0 / bn_speed
-
-            result_str = [
-                tx_packets,
-                overhead,
-                round(throughput / fact_by, 3),
-                round(rtt, 3),
-                round(goodput / fact_by, 3),
-                unique_bytes,
-                rexmt_packets,
-                round(utilization, 3),
-                round(queue_mean, 3),
-                round(queue_variance, 3),
-                round(queue_mean * 100.0 / (self.buf_size / pkt_size), 3),
-                round(flow_cmp_time, 3),
-            ]
-
-        return result_str
+    @staticmethod
+    def _process_packet(pkt, flows) -> None:
+        try:
+            tcp = pkt.tcp
+            key = (int(tcp.stream), pkt.ip.src, tcp.srcport, pkt.ip.dst, tcp.dstport)
+            ts = float(pkt.sniff_timestamp)
+            payload_len = int(tcp.len) if hasattr(tcp, "len") else 0
+            is_retrans = hasattr(tcp, "analysis_retransmission")
+            rtt_ms = float(tcp.analysis_ack_rtt) * 1000 if hasattr(tcp, "analysis_ack_rtt") else None
+            flows[key].add_packet(ts, payload_len, is_retrans, rtt_ms)
+        except AttributeError:
+            pass
 
     def _unit_factor(self) -> float:
         first, second = list(self.unit)
