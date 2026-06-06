@@ -67,3 +67,30 @@ def test_waf_command_builder_q_monitoring_is_1_when_single_run():
     })
     cmd, _ = WafCommandBuilder("1", "10", "bottleneckDelay", config).build()
     assert "qm=1" in cmd
+
+
+def test_queue_size_else_branch():
+    # scenario is neither "bottleneckDelay" nor "bottleneckSpeed" → else branch
+    config = _make_config("changingDelay", {
+        "bdpQsz": "1.0",
+        "changingDelay": "5,10",       # xscale (key == scenario name)
+        "bottleneckDelay": "10ms",
+        "bottleneckSpeed": "10Mbps",
+    })
+    # delay = int("10ms"[:-2]) = 10, speed_numeric = 10*1_000_000 = 10_000_000
+    # queue_size = int(1.0 * 10_000_000 * 2 * 0.001 * 10 / 8) = 25000
+    result = QueueSizeCalculator("changingDelay", "5", config).calculate()
+    assert result == "25000"
+
+
+def test_waf_command_builder_appends_mbps_for_bottleneck_speed():
+    config = _make_config("bottleneckSpeed", {
+        "bdpQsz": "1.0",
+        "bottleneckSpeed": "10,20",    # xscale
+        "bottleneckDelay": "10ms",
+        "speedUnit": "Mbps",
+        "runs": "1",
+        "cmd": "run --x=%(x)s --runNo=%(runNo)s --qs=%(queue_size)s --qm=%(qMonitoring)s",
+    })
+    cmd, _ = WafCommandBuilder("1", "10", "bottleneckSpeed", config).build()
+    assert "10Mbps" in cmd
